@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript & TypeScript Quiz - 100 Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 15px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .question-card.revealed {
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            color: #333;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 10px 0;
+        }
+        
+        .hint {
+            font-size: 0.8rem;
+            color: #888;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        
+        .answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #e9ecef;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .question-card.revealed .answer {
+            display: block;
+        }
+        
+        .answer-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #667eea;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .answer-text {
+            font-size: 0.95rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .answer-code {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            color: #2e7d32;
+            margin-top: 10px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .question-card {
+                padding: 15px;
+            }
+            
+            .code-block {
+                font-size: 0.8rem;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 JS & TS Quiz</h1>
+            <p>100 Questions (50 JS + 50 TS)</p>
+        </header>
+        
+        <div class="stats">
+            <div class="stat-box">📱 Mobile Friendly</div>
+            <div class="stat-box">👆 Tap to Reveal</div>
+            <div class="stat-box">🔥 100 Questions</div>
+        </div>
+        <div style="text-align: center; color: white; font-size: 0.8rem; margin-bottom: 15px;">
+            v1.1 - JS (1-50) | TS (51-100)
+        </div>
+
+        <div id="quiz-container"></div>
+        
+        <footer>
+            <p>Created by openclaw-mino • Practice makes perfect</p>
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "What will be logged to the console?",
+                code: `console.log(typeof typeof 1);`,
+                answer: "Returns: <code>\"string\"</code><br><br><strong>Why:</strong> <code>typeof 1</code> returns <code>\"number\"</code> (a string). Then <code>typeof \"number\"</code> returns <code>\"string\"</code>.",
+                hasCode: true
+            },
+            {
+                q: "What is the output of this code?",
+                code: `console.log(0.1 + 0.2 === 0.3);
+console.log(0.1 + 0.2);`,
+                answer: "Output:<br><code>false</code><br><code>0.30000000000000004</code><br><br><strong>Why:</strong> Floating-point precision issues in IEEE 754 representation. Use <code>Number.EPSILON</code> for comparisons or round to fixed decimals.",
+                hasCode: true
+            },
+            {
+                q: "What will be the result?",
+                code: `[] + [];
+[] + {};
+{} + [];`,
+                answer: "<code>[] + []</code> → <code>\"\"</code> (empty string)<br><code>[] + {}</code> → <code>\"[object Object]\"</code><br><code>{} + []</code> → <code>0</code> (in console, {} is parsed as empty block, then +[] coerces to 0)<br><br><strong>Note:</strong> Results can vary by context (expression vs statement).",
+                hasCode: true
+            },
+            {
+                q: "What is the event loop in JavaScript? Explain the execution order.",
+                code: null,
+                answer: "<strong>Event Loop</strong> is the mechanism that handles asynchronous code execution.<br><br><strong>Order:</strong><br>1. Execute all synchronous code in the call stack<br>2. Process all microtasks (Promises, queueMicrotask)<br>3. Render if needed<br>4. Execute one macrotask (setTimeout, setInterval, I/O)<br>5. Repeat from step 2<br><br>Microtasks have priority over macrotasks.",
+                hasCode: false
+            },
+            {
+                q: "What is the output and why?",
+                code: `console.log('start');
+setTimeout(() => console.log('timeout'), 0);
+Promise.resolve().then(() => console.log('promise'));
+console.log('end');`,
+                answer: "Output:<br><code>start</code><br><code>end</code><br><code>promise</code><br><code>timeout</code><br><br><strong>Why:</strong> Synchronous code runs first. Promises (microtasks) run before setTimeout (macrotask) even with 0ms delay.",
+                hasCode: true
+            },
+            {
+                q: "What does this code output?",
+                code: `var x = 10;
+function foo() {
+    console.log(x);
+    var x = 20;
+}
+foo();`,
+                answer: "Output: <code>undefined</code><br><br><strong>Why:</strong> Variable hoisting. The <code>var x</code> inside foo is hoisted to the top of the function scope, shadowing the global x. At the time of console.log, it's declared but not initialized (<code>undefined</code>).",
+                hasCode: true
+            },
+            {
+                q: "What is a closure in JavaScript? Provide an example.",
+                code: null,
+                answer: "A <strong>closure</strong> is a function that has access to variables from its outer (enclosing) scope even after the outer function has returned.<br><br><strong>Example:</strong><br><code>function counter() {<br>&nbsp;&nbsp;let count = 0;<br>&nbsp;&nbsp;return () => ++count;<br>}<br>const c = counter();<br>c(); // 1<br>c(); // 2</code><br>The inner function 'remembers' the count variable.",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `const obj = {
+    value: 42,
+    getValue: () => this.value
+};
+console.log(obj.getValue());`,
+                answer: "Output: <code>undefined</code><br><br><strong>Why:</strong> Arrow functions don't have their own <code>this</code>; they inherit from the enclosing scope. Here, <code>this</code> refers to the global object (or undefined in strict mode), not obj.",
+                hasCode: true
+            },
+            {
+                q: "Explain the difference between == and ===.",
+                code: null,
+                answer: "<strong>== (loose equality):</strong> Compares values after type coercion.<br>Example: <code>1 == '1'</code> is <code>true</code><br><br><strong>=== (strict equality):</strong> Compares values and types. No type coercion.<br>Example: <code>1 === '1'</code> is <code>false</code><br><br><strong>Best practice:</strong> Always use === to avoid unexpected type coercion bugs.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `console.log(1 < 2 < 3);
+console.log(3 > 2 > 1);`,
+                answer: "Output:<br><code>true</code><br><code>false</code><br><br><strong>Why:</strong> Operations are left-to-right.<br><code>1 < 2</code> is <code>true</code>, then <code>true < 3</code> → <code>1 < 3</code> → <code>true</code><br><code>3 > 2</code> is <code>true</code>, then <code>true > 1</code> → <code>1 > 1</code> → <code>false</code>",
+                hasCode: true
+            },
+            {
+                q: "What is the difference between null and undefined?",
+                code: null,
+                answer: "<strong>undefined:</strong> Variable declared but not assigned a value. Also, the default return value of functions without explicit return. <code>typeof undefined</code> is <code>'undefined'</code>.<br><br><strong>null:</strong> Explicitly assigned to represent 'no value' or 'empty'. It's an intentional absence. <code>typeof null</code> is <code>'object'</code> (a known bug in JavaScript).<br><br><strong>Comparison:</strong> <code>null == undefined</code> is <code>true</code>, but <code>null === undefined</code> is <code>false</code>.",
+                hasCode: false
+            },
+            {
+                q: "What will this code output?",
+                code: `const a = { x: 1 };
+const b = a;
+b.x = 2;
+console.log(a.x);`,
+                answer: "Output: <code>2</code><br><br><strong>Why:</strong> Objects are passed by reference. Both <code>a</code> and <code>b</code> point to the same object in memory. Modifying through one reference affects all references.",
+                hasCode: true
+            },
+            {
+                q: "Explain 'this' keyword in JavaScript. How does it work in different contexts?",
+                code: null,
+                answer: "<strong>Global context:</strong> <code>this</code> is the global object (window in browser, global in Node).<br><br><strong>Function call:</strong> <code>this</code> is global (or undefined in strict mode).<br><br><strong>Method call:</strong> <code>this</code> is the object the method belongs to.<br><br><strong>Constructor:</strong> <code>this</code> is the new instance being created.<br><br><strong>Arrow function:</strong> Inherits <code>this</code> from enclosing scope.<br><br><strong>call/apply/bind:</strong> Explicitly set <code>this</code> value.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `function Person(name) {
+    this.name = name;
+}
+const person = Person('John');
+console.log(person);
+console.log(name);`,
+                answer: "Output:<br><code>undefined</code> (person)<br><code>\"John\"</code> (global name)<br><br><strong>Why:</strong> Called without <code>new</code>, <code>Person</code> is a regular function. <code>this</code> refers to global object, so <code>this.name = 'John'</code> creates a global variable. No return value means person is undefined.",
+                hasCode: true
+            },
+            {
+                q: "What is debouncing and throttling? When to use each?",
+                code: null,
+                answer: "<strong>Debouncing:</strong> Ensures a function is called only after a specified delay has passed since the last call. Use for: search input, window resize end.<br><br><strong>Throttling:</strong> Ensures a function is called at most once in a specified time period. Use for: scroll events, button clicks, infinite scroll.<br><br><strong>Analogy:</strong> Debounce = 'wait until they stop typing'. Throttle = 'only check once per second'.",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `const arr = [1, 2, 3];
+arr[10] = 10;
+console.log(arr.length);
+console.log(arr[5]);`,
+                answer: "Output:<br><code>11</code><br><code>undefined</code><br><br><strong>Why:</strong> Setting index 10 expands array to length 11. Indices 3-9 are empty slots (sparse array), not <code>undefined</code> values. Accessing them returns <code>undefined</code> but they don't exist as own properties.",
+                hasCode: true
+            },
+            {
+                q: "Explain the difference between var, let, and const.",
+                code: null,
+                answer: "<strong>var:</strong> Function-scoped, hoisted (initialized as undefined), can be redeclared and reassigned.<br><br><strong>let:</strong> Block-scoped, hoisted but not initialized (TDZ - Temporal Dead Zone), can be reassigned but not redeclared in same scope.<br><br><strong>const:</strong> Block-scoped, hoisted but not initialized, cannot be reassigned. Must be initialized at declaration. Note: objects/arrays can still be mutated.",
+                hasCode: false
+            },
+            {
+                q: "What is the Temporal Dead Zone (TDZ)?",
+                code: `console.log(a);
+let a = 5;`,
+                answer: "The <strong>TDZ</strong> is the period between entering a scope and the actual declaration of a <code>let</code> or <code>const</code> variable.<br><br>During TDZ, accessing the variable throws a <code>ReferenceError</code>. This is different from <code>var</code> which returns <code>undefined</code> when hoisted.<br><br><code>typeof undeclaredVar</code> throws in TDZ but returns 'undefined' for truly undeclared variables.",
+                hasCode: true
+            },
+            {
+                q: "What will this output?",
+                code: `console.log([] == ![]);
+console.log([] == []);`,
+                answer: "Output:<br><code>true</code><br><code>false</code><br><br><strong>Why:</strong> <code>![]</code> is <code>false</code> (array is truthy). <code>[] == false</code> → <code>[] == 0</code> → <code>'' == 0</code> → <code>0 == 0</code> → <code>true</code><br><br><code>[] == []</code> compares references. Two different array objects are never equal.",
+                hasCode: true
+            },
+            {
+                q: "What are Promises? Explain the states of a Promise.",
+                code: null,
+                answer: "A <strong>Promise</strong> is an object representing the eventual completion or failure of an asynchronous operation.<br><br><strong>States:</strong><br>• <strong>Pending:</strong> Initial state, neither fulfilled nor rejected<br>• <strong>Fulfilled:</strong> Operation completed successfully<br>• <strong>Rejected:</strong> Operation failed<br><br><strong>Note:</strong> Once fulfilled or rejected, a promise is settled and cannot change state.",
+                hasCode: false
+            },
+            {
+                q: "What will be logged?",
+                code: `const promise = new Promise((resolve) => {
+    console.log('A');
+    resolve('B');
+    console.log('C');
+});
+console.log('D');
+promise.then(value => console.log(value));
+console.log('E');`,
+                answer: "Output:<br><code>A</code><br><code>C</code><br><code>D</code><br><code>E</code><br><code>B</code><br><br><strong>Why:</strong> Promise constructor runs synchronously. <code>.then()</code> is a microtask that runs after current synchronous code completes.",
+                hasCode: true
+            },
+            {
+                q: "Explain async/await. Is it really asynchronous?",
+                code: null,
+                answer: "<code>async/await</code> is syntactic sugar over Promises. It makes asynchronous code look and behave more like synchronous code.<br><br><strong>Key points:</strong><br>• <code>async</code> function always returns a Promise<br>• <code>await</code> pauses execution of the async function (not the main thread)<br>• Code after <code>await</code> goes to microtask queue<br><br><strong>Is it async?</strong> Yes, but it runs on the same thread. JavaScript is single-threaded; async means non-blocking, not parallel.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `async function test() {
+    return 1;
+}
+test().then(console.log);
+console.log(2);`,
+                answer: "Output:<br><code>2</code><br><code>1</code><br><br><strong>Why:</strong> <code>async</code> function returns a Promise. The <code>.then()</code> callback is a microtask queued for later. Synchronous <code>console.log(2)</code> runs first.",
+                hasCode: true
+            },
+            {
+                q: "What is prototype inheritance in JavaScript?",
+                code: null,
+                answer: "JavaScript uses <strong>prototypal inheritance</strong> where objects can inherit properties and methods from other objects.<br><br>Every object has an internal <code>[[Prototype]]</code> link. When accessing a property, JS walks up the prototype chain until it finds it or reaches null.<br><br><code>Object.create()</code>, <code>__proto__</code>, and <code>class extends</code> all use this mechanism under the hood.",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between Object.freeze(), Object.seal(), and Object.preventExtensions()?",
+                code: null,
+                answer: "<strong>Object.preventExtensions():</strong> Prevents adding new properties. Existing ones can be modified/deleted.<br><br><strong>Object.seal():</strong> Prevents adding/removing properties. Existing ones can be modified but not reconfigured.<br><br><strong>Object.freeze():</strong> Most restrictive. Prevents adding, removing, or modifying properties. Makes object immutable (shallow only).",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `const obj = { a: 1 };
+const frozen = Object.freeze(obj);
+frozen.a = 2;
+console.log(frozen.a);
+console.log(Object.isFrozen(frozen));`,
+                answer: "Output:<br><code>1</code><br><code>true</code><br><br><strong>Why:</strong> <code>Object.freeze()</code> prevents modification. In non-strict mode, the assignment silently fails. In strict mode, it throws a TypeError. Note: freeze is shallow — nested objects can still be mutated.",
+                hasCode: true
+            },
+            {
+                q: "What is the output?",
+                code: `const obj = {
+    [Symbol('a')]: 'symbol a',
+    b: 'regular b'
+};
+console.log(Object.keys(obj));
+console.log(Object.getOwnPropertySymbols(obj));`,
+                answer: "Output:<br><code>['b']</code><br><code>[Symbol('a')]</code><br><br><strong>Why:</strong> Symbol properties are not enumerable and don't show up in <code>Object.keys()</code>, <code>for...in</code>, or <code>JSON.stringify()</code>. Use <code>Object.getOwnPropertySymbols()</code> or <code>Reflect.ownKeys()</code> to access them.",
+                hasCode: true
+            },
+            {
+                q: "Explain Generators in JavaScript.",
+                code: null,
+                answer: "<strong>Generators</strong> are functions that can pause execution and resume later, declared with <code>function*</code>. They return an iterator.<br><br><strong>Key features:</strong><br>• Use <code>yield</code> to pause and return a value<br>• Use <code>.next()</code> to resume<br>• Can receive values back via <code>.next(value)</code><br>• Useful for lazy evaluation, infinite sequences, async flow control<br><br>Generator maintains its own state between pauses.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `function* gen() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+const g = gen();
+console.log(g.next().value);
+console.log(g.next().value);
+console.log([...gen()]);`,
+                answer: "Output:<br><code>1</code><br><code>2</code><br><code>[1, 2, 3]</code><br><br><strong>Why:</strong> Generators are iterators. Each <code>.next()</code> advances to the next yield. The spread operator consumes the entire generator into an array.",
+                hasCode: true
+            },
+            {
+                q: "What is a WeakMap and when should you use it?",
+                code: null,
+                answer: "<strong>WeakMap</strong> is a key-value collection where keys must be objects and are held weakly.<br><br><strong>Characteristics:</strong><br>• Keys are garbage collected when no other references exist<br>• Not iterable, no <code>.size</code>, no <code>.clear()</code><br>• Use cases: private data, caching, metadata attachment<br><br><strong>When to use:</strong> When you want to associate data with objects without preventing their garbage collection.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `const map = new Map();
+const key1 = { id: 1 };
+const key2 = { id: 1 };
+map.set(key1, 'first');
+map.set(key2, 'second');
+console.log(map.get(key1));
+console.log(map.size);`,
+                answer: "Output:<br><code>\"first\"</code><br><code>2</code><br><br><strong>Why:</strong> Map keys are compared by reference (identity), not equality. <code>key1</code> and <code>key2</code> are different objects in memory, even with same content. Two separate entries are created.",
+                hasCode: true
+            },
+            {
+                q: "Explain Memoization. Implement a simple memoized function.",
+                code: null,
+                answer: "<strong>Memoization</strong> is an optimization technique that caches function results to avoid redundant computations.<br><br><strong>Implementation:</strong><br><code>function memoize(fn) {<br>&nbsp;&nbsp;const cache = new Map();<br>&nbsp;&nbsp;return (...args) => {<br>&nbsp;&nbsp;&nbsp;&nbsp;const key = JSON.stringify(args);<br>&nbsp;&nbsp;&nbsp;&nbsp;if (cache.has(key)) return cache.get(key);<br>&nbsp;&nbsp;&nbsp;&nbsp;const result = fn(...args);<br>&nbsp;&nbsp;&nbsp;&nbsp;cache.set(key, result);<br>&nbsp;&nbsp;&nbsp;&nbsp;return result;<br>&nbsp;&nbsp;};<br>}</code><br><br>Best for pure functions with expensive calculations.",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `console.log(1);
+setTimeout(() => console.log(2), 0);
+Promise.resolve().then(() => {
+    console.log(3);
+    Promise.resolve().then(() => console.log(4));
+});
+console.log(5);`,
+                answer: "Output:<br><code>1</code><br><code>5</code><br><code>3</code><br><code>4</code><br><code>2</code><br><br><strong>Why:</strong> Sync (1,5) → Microtasks (3 creates another microtask 4) → Macrotasks (2). Microtasks are processed until the queue is empty before moving to macrotasks.",
+                hasCode: true
+            },
+            {
+                q: "What is the difference between call(), apply(), and bind()?",
+                code: null,
+                answer: "<strong>call(this, arg1, arg2, ...):</strong> Invokes function with given <code>this</code> value and arguments passed individually.<br><br><strong>apply(this, [arg1, arg2, ...]):</strong> Same as call but arguments passed as an array.<br><br><strong>bind(this, arg1, ...):</strong> Returns a new function with <code>this</code> permanently bound. Can be called later. Supports partial application (currying).",
+                hasCode: false
+            },
+            {
+                q: "What is currying in JavaScript?",
+                code: null,
+                answer: "<strong>Currying</strong> transforms a function with multiple arguments into a sequence of functions that each take a single argument.<br><br><strong>Example:</strong><br><code>const add = a => b => c => a + b + c;<br>add(1)(2)(3); // 6</code><br><br><strong>Benefits:</strong> Partial application, function composition, reusable specialized functions.<br><br><strong>Implementation:</strong> Use recursion or <code>.bind()</code> to create nested functions.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `const add = a => b => a + b;
+const add5 = add(5);
+console.log(add5(10));
+console.log(add(5)(10));`,
+                answer: "Output:<br><code>15</code><br><code>15</code><br><br><strong>Why:</strong> Curried function. <code>add(5)</code> returns <code>b => 5 + b</code>. <code>add5(10)</code> returns <code>15</code>. Both calls produce the same result through different syntax.",
+                hasCode: true
+            },
+            {
+                q: "Explain the module pattern and IIFE.",
+                code: null,
+                answer: "<strong>IIFE (Immediately Invoked Function Expression):</strong> A function that runs immediately after being defined. Creates a private scope.<br><br><strong>Module Pattern:</strong> Uses IIFE to create encapsulated modules with private and public members.<br><br><strong>Example:</strong><br><code>const Module = (function() {<br>&nbsp;&nbsp;let privateVar = 0;<br>&nbsp;&nbsp;return {<br>&nbsp;&nbsp;&nbsp;&nbsp;increment: () => ++privateVar,<br>&nbsp;&nbsp;&nbsp;&nbsp;get: () => privateVar<br>&nbsp;&nbsp;};<br>})();</code>",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `(function() {
+    var a = b = 3;
+})();
+console.log(typeof a);
+console.log(typeof b);`,
+                answer: "Output:<br><code>\"undefined\"</code><br><code>\"number\"</code><br><br><strong>Why:</strong> <code>var a = b = 3</code> is parsed as <code>b = 3; var a = b;</code>. <code>b</code> becomes a global variable (no var/let/const). <code>a</code> is function-scoped. Outside the IIFE, <code>a</code> is undefined, <code>b</code> is 3.",
+                hasCode: true
+            },
+            {
+                q: "What is hoisting in JavaScript?",
+                code: null,
+                answer: "<strong>Hoisting</strong> is JavaScript's behavior of moving declarations to the top of their scope during compilation phase.<br><br><strong>var:</strong> Hoisted and initialized with <code>undefined</code>. Can be used before declaration (bad practice).<br><br><strong>let/const:</strong> Hoisted but not initialized. In TDZ until declaration. Throws ReferenceError if accessed early.<br><br><strong>functions:</strong> Function declarations are fully hoisted. Can be called before definition in code.",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `foo();
+function foo() {
+    console.log('foo');
+}
+bar();
+var bar = function() {
+    console.log('bar');
+};`,
+                answer: "Output:<br><code>\"foo\"</code><br><code>TypeError: bar is not a function</code><br><br><strong>Why:</strong> Function declarations (<code>function foo</code>) are fully hoisted. Function expressions (<code>var bar = function</code>) are hoisted as variables — <code>bar</code> exists as <code>undefined</code>, so calling it throws TypeError.",
+                hasCode: true
+            },
+            {
+                q: "Explain shallow copy vs deep copy.",
+                code: null,
+                answer: "<strong>Shallow Copy:</strong> Creates new object but nested objects are still references to originals. Changes to nested objects affect both copies.<br><br>Methods: <code>Object.assign()</code>, spread operator <code>{...obj}</code>, <code>Array.slice()</code><br><br><strong>Deep Copy:</strong> Completely independent copy including all nested objects.<br><br>Methods: <code>JSON.parse(JSON.stringify(obj))</code> (limited), <code>structuredClone()</code> (modern), or libraries like lodash's <code>cloneDeep</code>.<br><br><strong>Circular references:</strong> JSON method fails, structuredClone handles them.",
+                hasCode: false
+            },
+            {
+                q: "What is the output?",
+                code: `const a = { x: { y: 1 } };
+const b = { ...a };
+b.x.y = 2;
+console.log(a.x.y);
+const c = JSON.parse(JSON.stringify(a));
+c.x.y = 3;
+console.log(a.x.y);`,
+                answer: "Output:<br><code>2</code><br><code>2</code><br><br><strong>Why:</strong> Spread creates shallow copy — <code>b.x</code> references same object as <code>a.x</code>. Changing <code>b.x.y</code> affects <code>a</code>. JSON method creates deep copy, so <code>c</code> is independent and doesn't affect <code>a</code>.",
+                hasCode: true
+            },
+            {
+                q: "What is JSON and its methods?",
+                code: null,
+                answer: "<strong>JSON (JavaScript Object Notation)</strong> is a lightweight data interchange format.<br><br><strong>JSON.stringify(obj, replacer, space):</strong> Converts JS value to JSON string.<br>• Skips functions, undefined, and Symbol properties<br>• Throws on circular references<br><br><strong>JSON.parse(string, reviver):</strong> Parses JSON string to JS value.<br><br><strong>Date handling:</strong> Dates are converted to ISO strings; use reviver to reconstruct Date objects.",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `const obj = {
+    value: 1,
+    toString() {
+        return String(this.value++);
+    }
+};
+if (obj == 1 \u0026\u0026 obj == 2 \u0026\u0026 obj == 3) {
+    console.log('Magic!');
+}`,
+                answer: "Output:<br><code>\"Magic!\"</code><br><br><strong>Why:</strong> Loose equality triggers <code>toString()</code> (or <code>valueOf()</code>) for object-to-primitive conversion. Each comparison calls <code>toString()</code>, which increments and returns the value. First: 1==1 ✓, second: 2==2 ✓, third: 3==3 ✓.",
+                hasCode: true
+            },
+            {
+                q: "Explain the Fetch API vs XMLHttpRequest.",
+                code: null,
+                answer: "<strong>XMLHttpRequest (XHR):</strong> Older, event-based API. More verbose but supports progress tracking and synchronous requests (deprecated).<br><br><strong>Fetch API:</strong> Modern Promise-based API. Cleaner syntax, built into modern browsers, returns Promise.<br><br><strong>Key differences:</strong><br>• Fetch doesn't reject on HTTP error status (only on network failure)<br>• Fetch requires manual handling of credentials, headers<br>• XHR has better progress event support<br>• Fetch is more composable with async/await",
+                hasCode: false
+            },
+            {
+                q: "What is CORS? Why does it exist?",
+                code: null,
+                answer: "<strong>CORS (Cross-Origin Resource Sharing)</strong> is a security mechanism that restricts web pages from making requests to a different domain than the one serving the web page.<br><br><strong>Why it exists:</strong> Same-Origin Policy prevents malicious sites from reading data from other domains using the user's authenticated session.<br><br><strong>How it works:</strong> Server sends Access-Control-Allow-Origin header. Browser blocks response if origin not allowed.<br><br><strong>Preflight:</strong> Non-simple requests (PUT, DELETE, custom headers) trigger OPTIONS preflight request.",
+                hasCode: false
+            },
+            {
+                q: "What is XSS and how to prevent it?",
+                code: null,
+                answer: "<strong>XSS (Cross-Site Scripting)</strong> is an attack where malicious scripts are injected into web pages viewed by other users.<br><br><strong>Types:</strong> Stored (persistent), Reflected (via URL), DOM-based (client-side)<br><br><strong>Prevention:</strong><br>• Escape/sanitize user input before rendering<br>• Use <code>textContent</code> instead of <code>innerHTML</code><br>• Content Security Policy (CSP) headers<br>• HttpOnly cookies (prevent cookie theft via JS)<br>• Use frameworks with auto-escaping (React, Vue)",
+                hasCode: false
+            },
+            {
+                q: "What will this output?",
+                code: `const p = new Promise((resolve, reject) => {
+    reject('Error!');
+    resolve('Success!');
+});
+p.then(console.log).catch(console.error);`,
+                answer: "Output:<br><code>Error!</code><br><br><strong>Why:</strong> A Promise can only settle once. After <code>reject()</code> is called, the Promise is in rejected state. Subsequent <code>resolve()</code> calls are ignored. The catch handler receives the rejection reason.",
+                hasCode: true
+            },
+            {
+                q: "Explain the Virtual DOM and how React uses it.",
+                code: null,
+                answer: "<strong>Virtual DOM</strong> is an in-memory representation of the actual DOM. It's a lightweight JavaScript object tree.<br><br><strong>How React uses it:</strong><br>1. React creates Virtual DOM from component render output<br>2. On state/props change, creates new Virtual DOM<br>3. Diff algorithm compares old and new Virtual DOM<br>4. Calculates minimal set of DOM mutations needed<br>5. Batches and applies only those changes to real DOM<br><br><strong>Benefits:</strong> Minimizes expensive DOM operations, improves performance, cross-platform (React Native).",
+                hasCode: false
+            },
+            {
+                q: "What is the value returned from the function below? And why?",
+                code: `function check() {
+    const a = Number('Hello there!');
+    return a == NaN;
+}`,
+                answer: "Returns: <code>false</code><br><br><strong>Why:</strong> <code>Number('Hello there!')</code> returns <code>NaN</code>. But <code>NaN == NaN</code> is <code>false</code> — this is a quirk of JavaScript. NaN is the only value not equal to itself. Use <code>Number.isNaN()</code> or <code>isNaN()</code> instead.",
+                hasCode: true
+            },
+            {
+                q: "Explain passed by value and passed by reference in JavaScript.",
+                code: null,
+                answer: "<strong>Pass by value:</strong> Primitive types (string, number, boolean, null, undefined, symbol, bigint) are copied when assigned or passed to functions. Changes don't affect the original.<br><br><strong>Pass by reference:</strong> Objects (including arrays, functions, dates) share the same memory reference. Changes to the copy affect the original.",
+                hasCode: false
+            },
+            // TypeScript Questions (51-100)
+            {
+                q: "What is TypeScript and why use it over JavaScript?",
+                code: null,
+                answer: "<strong>TypeScript</strong> is a superset of JavaScript that adds static type checking. It compiles to plain JavaScript.<br><br><strong>Benefits:</strong><br>• Catch errors at compile time, not runtime<br>• Better IDE support (autocomplete, refactoring)<br>• Self-documenting code with types<br>• Easier maintenance of large codebases<br>• Modern JS features with backward compatibility",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between interface and type in TypeScript?",
+                code: null,
+                answer: "<strong>interface:</strong><br>• Can be extended with 'extends'<br>• Can be merged (declaration merging)<br>• Better for object shapes<br>• Cannot represent primitives directly<br><br><strong>type:</strong><br>• Can use unions, intersections, mapped types<br>• Cannot be merged (fixed definition)<br>• Can represent primitives, tuples, unions<br>• More flexible for complex types<br><br><strong>Rule of thumb:</strong> Use interface for objects, type for everything else.",
+                hasCode: false
+            },
+            {
+                q: "What will this code output?",
+                code: `type ID = string | number;
+let userId: ID = 123;
+userId = 'abc';
+console.log(typeof userId);`,
+                answer: "Output: <code>\"string\"</code><br><br><strong>Why:</strong> TypeScript's union types (|) allow a variable to be one of several types. At runtime, it's just JavaScript, so typeof returns the actual runtime type. TypeScript types are erased during compilation.",
+                hasCode: true
+            },
+            {
+                q: "Explain Generics in TypeScript with an example.",
+                code: null,
+                answer: "<strong>Generics</strong> allow creating reusable components that work with multiple types while maintaining type safety.<br><br><strong>Example:</strong><br><code>function identity&lt;T&gt;(arg: T): T {<br>&nbsp;&nbsp;return arg;<br>}<br><br>let num = identity&lt;number&gt;(5);<br>let str = identity('hello'); // Type inference</code><br><br><strong>Generic constraints:</strong><br><code>function logLength&lt;T extends { length: number }&gt;(arg: T)</code>",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between 'any' and 'unknown'?",
+                code: null,
+                answer: "<strong>any:</strong><br>• Disables type checking<br>• Can do anything without errors<br>• Use as last resort<br><br><strong>unknown:</strong><br>• Type-safe counterpart of any<br>• Cannot use until type is narrowed<br>• Forces type checking before operations<br><br><strong>Best practice:</strong> Prefer unknown over any for better type safety.",
+                hasCode: false
+            },
+            {
+                q: "What will happen with this code?",
+                code: `let value: unknown = 'hello';
+console.log(value.toUpperCase());`,
+                answer: "<strong>Compile-time error:</strong> Object is of type 'unknown'.<br><br><strong>Fix with type narrowing:</strong><br><code>if (typeof value === 'string') {<br>&nbsp;&nbsp;console.log(value.toUpperCase());<br>}</code><br><br>Or use type assertion: <code>(value as string).toUpperCase()</code>",
+                hasCode: true
+            },
+            {
+                q: "Explain Type Guards in TypeScript.",
+                code: null,
+                answer: "<strong>Type Guards</strong> are checks that narrow down the type of a variable within a conditional block.<br><br><strong>Built-in:</strong><br>• <code>typeof</code> - for primitives<br>• <code>instanceof</code> - for classes<br>• <code>in</code> - for object properties<br><br><strong>User-defined:</strong><br><code>function isFish(pet: Fish | Bird): pet is Fish {<br>&nbsp;&nbsp;return (pet as Fish).swim !== undefined;<br>}</code>",
+                hasCode: false
+            },
+            {
+                q: "What does this type represent?",
+                code: `type Nullable<T> = T | null | undefined;
+let name: Nullable<string>;`,
+                answer: "<strong>Nullable<T></strong> is a generic type that represents a value which can be of type T, null, or undefined.<br><br>This is useful for modeling values that might not exist, like API responses or optional form fields.<br><br><strong>Example usage:</strong><br><code>function findUser(id: number): Nullable&lt;User&gt;</code>",
+                hasCode: true
+            },
+            {
+                q: "What are Utility Types in TypeScript? List 5 common ones.",
+                code: null,
+                answer: "<strong>Utility Types</strong> provide convenient type transformations.<br><br><strong>Common ones:</strong><br>• <code>Partial&lt;T&gt;</code> - All properties optional<br>• <code>Readonly&lt;T&gt;</code> - All properties readonly<br>• <code>Pick&lt;T, K&gt;</code> - Select specific properties<br>• <code>Omit&lt;T, K&gt;</code> - Remove specific properties<br>• <code>Record&lt;K, T&gt;</code> - Object with keys K, values T<br>• <code>Exclude&lt;T, U&gt;</code> - Remove types from union<br>• <code>ReturnType&lt;T&gt;</code> - Extract return type",
+                hasCode: false
+            },
+            {
+                q: "What does Partial<User> do?",
+                code: `interface User {
+    name: string;
+    age: number;
+    email: string;
+}
+function updateUser(user: Partial<User>) {
+    // ...
+}`,
+                answer: "<strong>Partial&lt;User&gt;</strong> makes all properties optional:<br><br><code>interface PartialUser {<br>&nbsp;&nbsp;name?: string;<br>&nbsp;&nbsp;age?: number;<br>&nbsp;&nbsp;email?: string;<br>}</code><br><br>This is perfect for update functions where you only provide the fields you want to change.",
+                hasCode: true
+            },
+            {
+                q: "Explain the 'readonly' modifier.",
+                code: null,
+                answer: "<strong>readonly</strong> prevents reassignment of properties after initialization.<br><br><code>interface Point {<br>&nbsp;&nbsp;readonly x: number;<br>&nbsp;&nbsp;readonly y: number;<br>}</code><br><br><strong>Note:</strong> readonly is compile-time only. At runtime, values can still be modified. For deep immutability, use Readonly&lt;T&gt; or libraries like Immer.<br><br><strong>const vs readonly:</strong> const is for variables, readonly for properties.",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between 'enum' and 'const enum'?",
+                code: `enum Color { Red, Green, Blue }
+const enum Direction { Up, Down }`,
+                answer: "<strong>enum:</strong><br>• Generates JavaScript object at runtime<br>• Reverse mapping: Color[0] === 'Red'<br>• Can be iterated over<br><br><strong>const enum:</strong><br>• Inlined at compile time (no runtime object)<br>• Cannot be iterated<br>• Smaller bundle size<br>• Better performance<br><br><strong>Recommendation:</strong> Use const enum or union types instead of regular enum.",
+                hasCode: true
+            },
+            {
+                q: "What are Mapped Types?",
+                code: null,
+                answer: "<strong>Mapped Types</strong> create new types by transforming properties of an existing type.<br><br><code>type Optional&lt;T&gt; = {<br>&nbsp;&nbsp;[P in keyof T]?: T[P];<br>};</code><br><br><strong>Modifiers:</strong><br>• <code>?</code> - make optional<br>• <code>readonly</code> - make readonly<br>• <code>-?</code> - remove optionality<br>• <code>-readonly</code> - remove readonly<br><br><strong>Key remapping:</strong> <code>[K in keyof T as NewKey]</code>",
+                hasCode: false
+            },
+            {
+                q: "What does this mapped type do?",
+                code: `type EventPayloads = {
+    click: { x: number; y: number };
+    resize: { width: number; height: number };
+};
+
+type EventHandlers = {
+    [K in keyof EventPayloads as \`on\${Capitalize<K>}\`]:
+        (payload: EventPayloads[K]) => void;
+};`,
+                answer: "Creates event handler types with 'on' prefix:<br><br><code>type EventHandlers = {<br>&nbsp;&nbsp;onClick: (payload: { x: number; y: number }) => void;<br>&nbsp;&nbsp;onResize: (payload: { width: number; height: number }) => void;<br>}</code><br><br>This uses <strong>key remapping</strong> with template literal types and Capitalize utility.",
+                hasCode: true
+            },
+            {
+                q: "Explain Conditional Types in TypeScript.",
+                code: null,
+                answer: "<strong>Conditional Types</strong> select a type based on a condition:<br><br><code>type IsString&lt;T&gt; = T extends string ? true : false;</code><br><br><strong>Distributive:</strong> <code>(A | B) extends C ? X : Y</code> becomes <code>(A extends C ? X : Y) | (B extends C ? X : Y)</code><br><br><strong>infer keyword:</strong> Extract type information<br><code>type ReturnType&lt;T&gt; = T extends (...args: any[]) => infer R ? R : never;</code>",
+                hasCode: false
+            },
+            {
+                q: "What does this conditional type extract?",
+                code: `type ArrayElement<T> = T extends (infer U)[] ? U : never;
+type Str = ArrayElement<string[]>;`,
+                answer: "Extracts the element type from an array:<br><br><code>type Str = string</code><br><br><strong>How it works:</strong><br>• <code>string[]</code> extends <code>(infer U)[]</code> where U = string<br>• Returns the inferred U<br><br><strong>Other examples:</strong><br><code>type FirstArg&lt;T&gt; = T extends (arg: infer A, ...rest: any[]) => any ? A : never;</code>",
+                hasCode: true
+            },
+            {
+                q: "What is 'never' type in TypeScript?",
+                code: null,
+                answer: "<strong>never</strong> represents a value that never occurs.<br><br><strong>Use cases:</strong><br>• Functions that throw errors or never return<br>• Exhaustiveness checking in switch statements<br>• Filtering types in conditional types<br><br><code>function throwError(msg: string): never {<br>&nbsp;&nbsp;throw new Error(msg);<br>}</code><br><br><strong>Bottom type:</strong> never is assignable to every type, but no type is assignable to never.",
+                hasCode: false
+            },
+            {
+                q: "Explain Exhaustiveness Checking with an example.",
+                code: `type Shape = 
+    | { kind: 'circle'; radius: number }
+    | { kind: 'square'; side: number };
+
+function getArea(shape: Shape): number {
+    switch(shape.kind) {
+        case 'circle': return Math.PI * shape.radius ** 2;
+        case 'square': return shape.side ** 2;
+    }
+}`,
+                answer: "Exhaustiveness checking ensures all cases are handled. Add a default case with 'never':<br><br><code>default:<br>&nbsp;&nbsp;const _exhaustiveCheck: never = shape;<br>&nbsp;&nbsp;return _exhaustiveCheck;</code><br><br>If you add a 'triangle' to Shape without updating the switch, TypeScript will error: Type '{ kind: \"triangle\"; }' is not assignable to type 'never'.",
+                hasCode: true
+            },
+            {
+                q: "What is the difference between 'implements' and 'extends'?",
+                code: null,
+                answer: "<strong>extends:</strong><br>• Class inheritance<br>• Gets all parent properties/methods<br>• Can override methods<br>• Single inheritance only<br><br><strong>implements:</strong><br>• Contract enforcement<br>• Must implement all interface members<br>• No implementation provided<br>• Can implement multiple interfaces<br><br><code>class Dog extends Animal implements CanRun, CanSwim</code>",
+                hasCode: false
+            },
+            {
+                q: "What are Abstract Classes?",
+                code: null,
+                answer: "<strong>Abstract classes</strong> cannot be instantiated directly and may contain abstract methods (no implementation).<br><br><code>abstract class Shape {<br>&nbsp;&nbsp;abstract getArea(): number;<br>&nbsp;&nbsp;printArea() {<br>&nbsp;&nbsp;&nbsp;&nbsp;console.log(this.getArea());<br>&nbsp;&nbsp;}<br>}</code><br><br><strong>vs Interface:</strong><br>• Abstract class can have implementation<br>• Can have private/protected members<br>• Can have constructors",
+                hasCode: false
+            },
+            {
+                q: "What is the 'as const' assertion?",
+                code: `const config = {
+    host: 'localhost',
+    port: 3000
+} as const;`,
+                answer: "<strong>as const</strong> creates a readonly literal type:<br><br><code>const config: {<br>&nbsp;&nbsp;readonly host: 'localhost';<br>&nbsp;&nbsp;readonly port: 3000;<br>}</code><br><br>Without it, types would be <code>{ host: string; port: number }</code>.<br><br><strong>Use cases:</strong><br>• Immutable configuration objects<br>• Tuple inference: <code>[1, 2, 3] as const</code><br>• Discriminated union literals",
+                hasCode: true
+            },
+            {
+                q: "Explain Module Resolution in TypeScript.",
+                code: null,
+                answer: "<strong>Module Resolution</strong> is how TypeScript finds modules when importing.<br><br><strong>Classic:</strong> Searches parent directories (deprecated)<br><br><strong>Node (default):</strong><br>• Relative paths: ./module.ts → ./module.ts or ./module/index.ts<br>• Non-relative: node_modules lookup<br>• @types packages for type definitions<br>• tsconfig.json paths mapping<br><br><strong>ES Modules:</strong> Stricter resolution following ES spec.",
+                hasCode: false
+            },
+            {
+                q: "What is the 'declare' keyword used for?",
+                code: `declare const $: any;
+declare module 'lodash' {
+    export function cloneDeep<T>(obj: T): T;
+}`,
+                answer: "<strong>declare</strong> tells TypeScript that a variable/module exists (usually from external source) without providing implementation.<br><br><strong>Use cases:</strong><br>• Global variables (jQuery, process.env)<br>• Third-party libraries without types<br>• .d.ts declaration files<br>• Ambient module declarations<br><br>No JavaScript code is generated for declare statements.",
+                hasCode: true
+            },
+            {
+                q: "What are Decorators in TypeScript?",
+                code: null,
+                answer: "<strong>Decorators</strong> are experimental features that add metadata or modify classes/methods.<br><br><strong>Types:</strong><br>• Class decorators<br>• Method decorators<br>• Property decorators<br>• Parameter decorators<br><br><code>@sealed<br>class Greeter {<br>&nbsp;&nbsp;@readonly<br>&nbsp;&nbsp;greeting: string;<br>}</code><br><br><strong>Note:</strong> Enable with <code>\"experimentalDecorators\": true</code> in tsconfig.json",
+                hasCode: false
+            },
+            {
+                q: "What is strict mode in TypeScript?",
+                code: null,
+                answer: "<strong>strict mode</strong> enables all strict type-checking options.<br><br><strong>Key flags:</strong><br>• <code>strictNullChecks</code> - null/undefined are separate types<br>• <code>noImplicitAny</code> - must annotate types<br>• <code>strictFunctionTypes</code> - stricter function checking<br>• <code>strictPropertyInitialization</code> - class properties must be initialized<br>• <code>noImplicitThis</code> - this must have explicit type<br><br><strong>Recommendation:</strong> Always enable strict mode for new projects.",
+                hasCode: false
+            },
+            {
+                q: "What is noImplicitAny and why enable it?",
+                code: `function greet(name) {
+    console.log('Hello ' + name);
+}`,
+                answer: "<strong>noImplicitAny</strong> prevents TypeScript from inferring 'any' type when it cannot determine a type.<br><br>With this flag enabled, the above code errors because 'name' implicitly has type 'any'.<br><br><strong>Fix:</strong><br><code>function greet(name: string) { ... }</code><br><br><strong>Benefit:</strong> Forces explicit typing, catching potential errors early.",
+                hasCode: true
+            },
+            {
+                q: "Explain strictNullChecks with an example.",
+                code: `interface User {
+    name: string;
+    email?: string;
+}
+
+function getEmail(user: User): string {
+    return user.email;
+}`,
+                answer: "With <strong>strictNullChecks</strong> enabled, this code errors because <code>user.email</code> can be <code>string | undefined</code>.<br><br><strong>Fix with type narrowing:</strong><br><code>if (user.email) {<br>&nbsp;&nbsp;return user.email;<br>}<br>return 'No email';</code><br><br>Or use non-null assertion (careful!):<br><code>return user.email!;</code>",
+                hasCode: true
+            },
+            {
+                q: "What is Type Narrowing?",
+                code: null,
+                answer: "<strong>Type Narrowing</strong> is the process of refining a broader type to a more specific type within a conditional block.<br><br><strong>Methods:</strong><br>• <code>typeof</code> checks<br>• <code>instanceof</code> checks<br>• <code>in</code> operator checks<br>• Custom type guards<br>• Discriminated unions<br>• Truthiness checks<br><br><code>if (typeof value === 'string') {<br>&nbsp;&nbsp;// value is narrowed to string<br>}</code>",
+                hasCode: false
+            },
+            {
+                q: "What are Discriminated Unions?",
+                code: `type Result = 
+    | { success: true; data: string }
+    | { success: false; error: string };
+
+function handle(result: Result) {
+    if (result.success) {
+        console.log(result.data);
+    } else {
+        console.log(result.error);
+    }
+}`,
+                answer: "<strong>Discriminated Unions</strong> use a common literal property (discriminant) to distinguish between union members.<br><br><strong>Benefits:</strong><br>• Type-safe branching<br>• Exhaustiveness checking<br>• Clear intent<br><br>TypeScript narrows the type based on the discriminant check, so <code>result.data</code> is only available when <code>success</code> is true.",
+                hasCode: true
+            },
+            {
+                q: "What is a Tuple Type?",
+                code: null,
+                answer: "<strong>Tuple</strong> represents an array with fixed length and known types at each position.<br><br><code>let point: [number, number] = [10, 20];<br>let user: [string, number, boolean] = ['John', 25, true];</code><br><br><strong>Named tuples:</strong><br><code>type Point = [x: number, y: number];</code><br><br><strong>Readonly tuples:</strong><br><code>readonly [string, number]</code>",
+                hasCode: false
+            },
+            {
+                q: "What does this tuple type enforce?",
+                code: `type HTTPResponse = [number, string, object?];
+const response: HTTPResponse = [200, 'OK'];`,
+                answer: "<strong>HTTPResponse</strong> is a tuple where:<br><br>• First element must be a <code>number</code> (status code)<br>• Second element must be a <code>string</code> (status text)<br>• Third element is optional <code>object</code> (body)<br><br><strong>Optional elements</strong> with <code>?</code> can be omitted.<br><br><strong>Rest elements:</strong> <code>[string, ...number[]]</code> for variable trailing elements.",
+                hasCode: true
+            },
+            {
+                q: "What is Function Overloading?",
+                code: null,
+                answer: "<strong>Function Overloading</strong> allows defining multiple function signatures for different parameter combinations.<br><br><code>function greet(name: string): string;<br>function greet(name: string, age: number): string;<br>function greet(name: string, age?: number): string {<br>&nbsp;&nbsp;if (age) {<br>&nbsp;&nbsp;&nbsp;&nbsp;return \`\${name}, \${age}\`;<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;return name;<br>}</code><br><br><strong>Note:</strong> Only the implementation has body; overloads define types.",
+                hasCode: false
+            },
+            {
+                q: "Explain Template Literal Types.",
+                code: null,
+                answer: "<strong>Template Literal Types</strong> build types from string literals, similar to template literals.<br><br><code>type EventName&lt;T extends string&gt; = \`on\${Capitalize&lt;T&gt;}\`;<br>// 'onClick' | 'onHover'</code><br><br><strong>Intrinsic string manipulation:</strong><br>• <code>Uppercase&lt;T&gt;</code><br>• <code>Lowercase&lt;T&gt;</code><br>• <code>Capitalize&lt;T&gt;</code><br>• <code>Uncapitalize&lt;T&gt;</code><br><br>Useful for generating event names, route paths, etc.",
+                hasCode: false
+            },
+            {
+                q: "What type does this template literal produce?",
+                code: "type Lang = 'en' | 'vi';\ntype Page = 'home' | 'about';\ntype Route = `/${Lang}/${Page}`;",
+                answer: "<strong>Route</strong> is a union of all combinations:<br><br><code>'/en/home' | '/en/about' | '/vi/home' | '/vi/about'</code><br><br>Template literal types distribute over unions, creating the Cartesian product of all combinations.",
+                hasCode: true
+            },
+            {
+                q: "What is the 'satisfies' operator (TypeScript 4.9+)?",
+                code: `const config = {
+    host: 'localhost',
+    port: 3000
+} satisfies { host: string; port: number };`,
+                answer: "<strong>satisfies</strong> checks that a value matches a type without widening it.<br><br><strong>vs type annotation:</strong><br>• <code>: Type</code> - value is widened to Type<br>• <code>satisfies Type</code> - keeps literal type, just validates<br><br><strong>Benefit:</strong> Get autocomplete from the shape while keeping precise literal types for the values.",
+                hasCode: true
+            },
+            {
+                q: "What is keyof operator?",
+                code: null,
+                answer: "<strong>keyof</strong> extracts all keys of a type as a union of string literals.<br><br><code>interface User {<br>&nbsp;&nbsp;name: string;<br>&nbsp;&nbsp;age: number;<br>}<br><br>type UserKeys = keyof User;<br>// 'name' | 'age'</code><br><br><strong>Use with generics:</strong><br><code>function getProperty&lt;T, K extends keyof T&gt;(obj: T, key: K)</code>",
+                hasCode: false
+            },
+            {
+                q: "What does 'typeof' do in type position?",
+                code: `const user = {
+    name: 'John',
+    age: 30
+};
+
+type User = typeof user;`,
+                answer: "In <strong>type position</strong>, typeof extracts the type of a value:<br><br><code>type User = {<br>&nbsp;&nbsp;name: string;<br>&nbsp;&nbsp;age: number;<br>}</code><br><br><strong>vs runtime typeof:</strong><br>• Type position: extracts static type<br>• Value position: returns runtime type string<br><br>Useful for deriving types from existing objects without duplicating definitions.",
+                hasCode: true
+            },
+            {
+                q: "What are the 'in' and 'is' operators in TypeScript?",
+                code: null,
+                answer: "<strong>in operator:</strong><br>• Runtime: checks if property exists in object<br>• Type guard: narrows union types<br><code>if ('swim' in animal) { ... }</code><br><br><strong>is keyword:</strong><br>• Custom type guard return type<br>• Narrows type in conditional blocks<br><code>function isString(x: unknown): x is string</code><br><br>Both help TypeScript narrow types for better type safety.",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between void and undefined?",
+                code: `function log1(): void {
+    console.log('hi');
+}
+function log2(): undefined {
+    console.log('hi');
+    return;
+}`,
+                answer: "<strong>void:</strong><br>• Function returns nothing meaningful<br>• Can return undefined or have no return statement<br>• Common for side-effect functions<br><br><strong>undefined:</strong><br>• Must explicitly return undefined (or just return;)<br>• More restrictive than void<br><br><strong>Recommendation:</strong> Use void for functions that don't return meaningful values.",
+                hasCode: true
+            },
+            {
+                q: "Explain the difference between interface merging and type intersection.",
+                code: null,
+                answer: "<strong>Interface Merging (Declaration Merging):</strong><br>• Multiple interfaces with same name are merged<br>• Happens at type level<br>• Only works with interfaces<br><br><strong>Type Intersection (&):</strong><br>• Combines multiple types into one<br>• Creates a new type with all properties<br>• Works with any type<br><br><code>type Combined = Type1 & Type2;</code>",
+                hasCode: false
+            },
+            {
+                q: "What is an Index Signature?",
+                code: `interface StringDictionary {
+    [key: string]: string;
+}`,
+                answer: "<strong>Index Signature</strong> defines types for dynamic property access when property names aren't known ahead.<br><br><code>interface User {
+&nbsp;&nbsp;[key: string]: string | number;<br>&nbsp;&nbsp;name: string; // Must match index signature<br>}</code><br><br><strong>Numeric index:</strong><br><code>[index: number]: string</code><br><br><strong>Limitation:</strong> All properties must match the index signature type.",
+                hasCode: true
+            },
+            {
+                q: "What are the triple-slash directives?",
+                code: `/// <reference path="./types.d.ts" />
+/// <reference types="node" />
+/// <reference lib="es2020" />`,
+                answer: "<strong>Triple-slash directives</strong> provide compiler instructions:<br><br>• <code>/// &lt;reference path=\"...\" /&gt;</code> - Include another file<br>• <code>/// &lt;reference types=\"...\" /&gt;</code> - Include @types package<br>• <code>/// &lt;reference lib=\"...\" /&gt;</code> - Include built-in lib<br>• <code>/// &lt;reference no-default-lib=\"true\" /&gt;</code><br><br>Must be at the very top of the file.<br><br><strong>Note:</strong> Mostly legacy; prefer imports and tsconfig.json now.",
+                hasCode: true
+            },
+            {
+                q: "What is tsconfig.json and what are important compiler options?",
+                code: null,
+                answer: "<strong>tsconfig.json</strong> configures TypeScript compiler options.<br><br><strong>Important options:</strong><br>• <code>target</code> - ECMAScript target version<br>• <code>module</code> - Module system (ESNext, CommonJS)<br>• <code>strict</code> - Enable all strict checks<br>• <code>esModuleInterop</code> - Better interoperability<br>• <code>skipLibCheck</code> - Skip type checking .d.ts files<br>• <code>outDir</code> - Output directory<br>• <code>rootDir</code> - Source directory<br>• <code>paths</code> - Module path mapping",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between .ts and .d.ts files?",
+                code: null,
+                answer: "<strong>.ts files:</strong><br>• Regular TypeScript source code<br>• Contains implementation + types<br>• Compiled to JavaScript<br><br><strong>.d.ts files:</strong><br>• Declaration files (types only)<br>• No implementation, just type signatures<br>• Used for libraries or ambient declarations<br>• Not compiled, just referenced<br><br><strong>Generating:</strong> <code>tsc --declaration</code> produces .d.ts from .ts",
+                hasCode: false
+            },
+            {
+                q: "Explain TypeScript's support for JSX/TSX.",
+                code: null,
+                answer: "<strong>TSX</strong> is TypeScript with JSX support.<br><br><strong>Configuration:</strong><br><code>{<br>&nbsp;&nbsp;\"jsx\": \"react\",<br>&nbsp;&nbsp;\"jsxFactory\": \"React.createElement\",<br>&nbsp;&nbsp;\"jsxFragmentFactory\": \"React.Fragment\"<br>}</code><br><br><strong>Type checking:</strong><br>• Component props are type-checked<br>• Children are validated<br>• Event handlers are typed<br><br><code>const element: JSX.Element = &lt;div&gt;Hello&lt;/div&gt;;</code>",
+                hasCode: false
+            },
+            {
+                q: "What does this React TypeScript code type-check?",
+                code: `interface Props {
+    title: string;
+    count?: number;
+}
+
+const MyComponent: React.FC<Props> = ({ title, count = 0 }) => {
+    return <div>{title}: {count}</div>;
+};`,
+                answer: "<strong>Type checking includes:</strong><br><br>• <code>title</code> is required string prop<br>• <code>count</code> is optional number (defaults to 0)<br>• Return type is ReactElement<br>• Props.children is implicitly included via React.FC<br>• Destructuring is validated against Props interface<br><br><strong>Note:</strong> React.FC is slightly controversial; some prefer explicit function return types.",
+                hasCode: true
+            },
+            {
+                q: "What is Covariance and Contravariance in TypeScript?",
+                code: null,
+                answer: "<strong>Covariance:</strong> &lt;: If A extends B, then Type&lt;A&gt; extends Type&lt;B&gt;<br>• Arrays, object properties, return types<br><br><strong>Contravariance:</strong> &gt;: If A extends B, then Type&lt;B&gt; extends Type&lt;A&gt;<br>• Function parameters (with strictFunctionTypes)<br><br><strong>Invariance:</strong> Both must be exactly the same<br><br>TypeScript uses structural typing with strict checks for function parameters to ensure type safety.",
+                hasCode: false
+            },
+            {
+                q: "What are Branded Types (Opaque Types)?",
+                code: `type UserId = string & { __brand: 'UserId' };
+type OrderId = string & { __brand: 'OrderId' };
+
+function getUser(id: UserId) { ... }
+getUser('123' as UserId);`,
+                answer: "<strong>Branded Types</strong> create nominal typing in TypeScript's structural type system.<br><br>At runtime, UserId and OrderId are both strings, but TypeScript treats them as incompatible types.<br><br><strong>Use cases:</strong><br>• Prevent mixing up different ID types<br>• Units (pixels vs points)<br>• Currency (USD vs EUR)<br><br><strong>Creation:</strong> Intersection with unique brand property.",
+                hasCode: true
+            },
+            {
+                q: "What is the 'unique symbol' type?",
+                code: `const sym1 = Symbol('key');
+const sym2: unique symbol = Symbol('key');`,
+                answer: "<strong>unique symbol</strong> is a subtype of symbol that can only be created with const assertion.<br><br>• Each unique symbol is a distinct type<br>• Used for creating opaque property keys<br>• Cannot be used in union types<br>• Must use const declaration<br><br><code>const brand: unique symbol = Symbol('brand');<br>interface Car {<br>&nbsp;&nbsp;[brand]: string;<br>}</code>",
+                hasCode: true
+            },
+            {
+                q: "Explain the Pick and Omit utility types.",
+                code: null,
+                answer: "<strong>Pick&lt;T, K&gt;:</strong> Selects a subset of properties from T<br><code>type UserPreview = Pick&lt;User, 'name' | 'email'&gt;;</code><br><br><strong>Omit&lt;T, K&gt;:</strong> Removes specified properties from T<br><code>type UserWithoutPassword = Omit&lt;User, 'password'&gt;;</code><br><br>Both create new types by transforming existing ones. Very useful for creating derived types without repetition.",
+                hasCode: false
+            },
+            {
+                q: "What does Required<Partial<T>> evaluate to?",
+                code: `interface User {
+    name?: string;
+    age?: number;
+}
+
+type RequiredUser = Required<Partial<User>>;`,
+                answer: "<strong>RequiredUser</strong> equals:<br><br><code>{<br>&nbsp;&nbsp;name: string;<br>&nbsp;&nbsp;age: number;<br>}</code><br><br><strong>How it works:</strong><br>1. Partial&lt;User&gt; makes all properties optional<br>2. Required&lt;...&gt; makes all properties required<br>3. Result: all properties required (original optionality removed)<br><br>This is useful for ensuring all properties are present after merging defaults.",
+                hasCode: true
+            },
+            {
+                q: "What is the difference between type inference and type assertion?",
+                code: null,
+                answer: "<strong>Type Inference:</strong><br>• TypeScript automatically determines the type<br>• Safe and preferred approach<br>• Based on assignment or return value<br><br><strong>Type Assertion:</strong><br>• Developer tells TypeScript the type<br>• Bypasses type checking<br>• Use when you know better than the compiler<br><br><code>const el = document.getElementById('app') as HTMLDivElement;</code><br><br><strong>Caution:</strong> Assertions can hide errors if wrong.",
+                hasCode: false
+            },
+            {
+                q: "Explain the 'in' operator narrowing with an example.",
+                code: `type Circle = { kind: 'circle'; radius: number };
+type Square = { kind: 'square'; side: number };
+type Shape = Circle | Square;
+
+function getArea(shape: Shape) {
+    if ('radius' in shape) {
+        return Math.PI * shape.radius ** 2;
+    }
+    return shape.side ** 2;
+}`,
+                answer: "The <strong>in operator</strong> checks if a property exists and narrows the type.<br><br><strong>How it works:</strong><br>• <code>'radius' in shape</code> checks if radius property exists<br>• Inside the if block, TypeScript knows shape is Circle<br>• Else branch, shape is narrowed to Square<br><br><strong>vs discriminated unions:</strong> 'in' checks property existence, discriminant checks property value.",
+                hasCode: true
+            },
+            {
+                q: "What is a Type Predicate?",
+                code: null,
+                answer: "<strong>Type Predicate</strong> is a special return type for functions that narrows types.<br><br><code>function isString(value: unknown): value is string {<br>&nbsp;&nbsp;return typeof value === 'string';<br>}</code><br><br><strong>Benefits:</strong><br>• TypeScript understands the type narrowing<br>• Works with filter(), find()<br>• More expressive than boolean returns<br><br><code>const strings = values.filter(isString);</code><br>// strings is string[]",
+                hasCode: false
+            },
+            {
+                q: "What is the NonNullable utility type?",
+                code: `type MaybeString = string | null | undefined;
+type DefinitelyString = NonNullable<MaybeString>;`,
+                answer: "<strong>NonNullable&lt;T&gt;</strong> removes null and undefined from a type.<br><br><code>type DefinitelyString = string</code><br><br><strong>Implementation:</strong><br><code>type NonNullable&lt;T&gt; = T extends null | undefined ? never : T;</code><br><br><strong>Use cases:</strong><br>• After null checks<br>• Defining required fields<br>• Filtering out optional values<br><br>Commonly used with arrays: <code>NonNullable&lt;string[]&gt;</code>",
+                hasCode: true
+            },
+            {
+                q: "Explain the ReturnType and Parameters utility types.",
+                code: `function greet(name: string, age: number): string {
+    return \`Hello \${name}, \${age}\`;
+}
+
+type GreetReturn = ReturnType<typeof greet>;
+type GreetParams = Parameters<typeof greet>;`,
+                answer: "<strong>ReturnType:</strong> Extracts the return type<br><code>type GreetReturn = string</code><br><br><strong>Parameters:</strong> Extracts parameter types as a tuple<br><code>type GreetParams = [name: string, age: number]</code><br><br><strong>Implementation:</strong><br><code>type ReturnType&lt;T&gt; = T extends (...args: any[]) => infer R ? R : never;</code><br><br>Very useful for maintaining type consistency.",
+                hasCode: true
+            },
+            {
+                q: "What is the ThisParameterType utility?",
+                code: null,
+                answer: "<strong>ThisParameterType&lt;T&gt;</strong> extracts the this parameter type from a function.<br><br><code>function toHex(this: number) {<br>&nbsp;&nbsp;return this.toString(16);<br>}<br><br>type HexContext = ThisParameterType&lt;typeof toHex&gt;;<br>// number</code><br><br><strong>OmitThisParameter&lt;T&gt;</strong> removes the this parameter for use as a standalone function.<br><br>Important when working with methods that need specific this context.",
+                hasCode: false
+            },
+            {
+                q: "What is the difference between import type and import?",
+                code: `import type { User } from './types';
+import { User } from './types';`,
+                answer: "<strong>import type:</strong><br>• Imports only types<br>• Erased at compile time<br>• No runtime dependency<br>• Cannot use for values<br><br><strong>import:</strong><br>• Imports values and types<br>• Kept at runtime<br>• Creates actual dependency<br><br><strong>Best practice:</strong> Use import type when you only need types to avoid circular dependencies and reduce bundle size.<br><br><strong>TypeScript 4.5+:</strong> import { type User } syntax also works.",
+                hasCode: true
+            },
+            {
+                q: "Explain the Awaited utility type (TypeScript 4.5+).",
+                code: `type PromiseString = Promise<string>;
+type AwaitedString = Awaited<PromiseString>;
+
+type NestedPromise = Promise<Promise<number>>;
+type AwaitedNumber = Awaited<NestedPromise>;`,
+                answer: "<strong>Awaited&lt;T&gt;</strong> recursively unwraps Promise types.<br><br><code>type AwaitedString = string<br>type AwaitedNumber = number</code><br><br><strong>vs generic await:</strong><br>• Awaited handles nested promises<br>• Works with union types containing promises<br>• Replaces manual conditional type unwrapping<br><br>Very useful when working with async return types.",
+                hasCode: true
+            },
+            {
+                q: "What is the satisfies operator and when to use it?",
+                code: `const routes = {
+    home: '/',
+    about: '/about'
+} satisfies Record<string, string>;
+
+// routes.home is still '/'
+// not widened to string`,
+                answer: "<strong>satisfies</strong> validates a type without widening it.<br><br><strong>vs type annotation:</strong><br>• <code>: Record&lt;string, string&gt;</code> widens to string keys/values<br>• <code>satisfies</code> keeps literal types while validating<br><br><strong>Use when:</strong><br>• You want autocomplete from a wide type<br>• But need precise literal types for the values<br>• Config objects, route definitions, constants<br><br>TypeScript 4.9+ feature.",
+                hasCode: true
+            },
+            {
+                q: "What are the differences between class fields in TypeScript vs JavaScript?",
+                code: null,
+                answer: "<strong>TypeScript additions:</strong><br>• Type annotations: <code>name: string</code><br>• Access modifiers: <code>private, protected, public</code><br>• readonly modifier<br>• definite assignment assertion: <code>name!: string</code><br>• abstract classes and methods<br><br><strong>Private fields:</strong><br>• TS <code>private</code>: compile-time only<br>• JS <code>#field</code>: runtime private<br><br>TypeScript's private is softer but allows more flexibility; # is truly private at runtime.",
+                hasCode: false
+            },
+            {
+                q: "What does the definite assignment assertion (!) do?",
+                code: `class User {
+    name!: string;
+    
+    constructor() {
+        this.init();
+    }
+    
+    init() {
+        this.name = 'John';
+    }
+}`,
+                answer: "<strong>Definite assignment assertion (!)</strong> tells TypeScript that a property will be initialized even if the compiler cannot verify it.<br><br><strong>Without !:</strong> Error: Property 'name' has no initializer.<br><br><strong>With !:</strong> Compiler trusts the developer<br><br><strong>Caution:</strong> Only use when you're certain initialization happens. Runtime error if you're wrong.<br><br>Also works on variables: <code>let x!: string;</code>",
+                hasCode: true
+            },
+            {
+                q: "Explain the const assertion and its use cases.",
+                code: `let arr = [1, 2, 3] as const;
+let obj = { x: 1, y: 2 } as const;
+let str = 'hello' as const;`,
+                answer: "<strong>as const</strong> creates readonly literal types:<br><br><code>arr: readonly [1, 2, 3] // tuple, not number[]<br>obj: { readonly x: 1; readonly y: 2 }<br>str: 'hello' // not string</code><br><br><strong>Use cases:</strong><br>• Immutable configuration<br>• Discriminated union literals<br>• Tuple inference<br>• Action types in Redux<br><br>Prevents widening while making everything readonly.",
+                hasCode: true
+            },
+            {
+                q: "What is strictBindCallApply and why is it useful?",
+                code: null,
+                answer: "<strong>strictBindCallApply</strong> ensures bind, call, and apply methods have strongly-typed arguments.<br><br><strong>Without:</strong> <code>fn.call(this, ...args: any[])</code><br><strong>With:</strong> Arguments are type-checked against the function signature<br><br><code>function greet(name: string, age: number) { ... }
+greet.call(null, 'John', 30); // ✓
+greet.call(null, 30, 'John'); // ✗ Type error</code><br><br>Part of strict mode. Catches argument order and type mismatches.",
+                hasCode: false
+            },
+            {
+                q: "What is the noUncheckedIndexedAccess option?",
+                code: `interface Dictionary {
+    [key: string]: string;
+}
+const dict: Dictionary = { a: 'hello' };
+const value = dict['b'];`,
+                answer: "<strong>noUncheckedIndexedAccess</strong> adds undefined to indexed access results.<br><br><strong>Without:</strong> value is <code>string</code><br><strong>With:</strong> value is <code>string | undefined</code><br><br><strong>Benefit:</strong> Forces you to handle cases where key doesn't exist.<br><br><code>if (value) { ... }</code><br>or<br><code>const val = dict['b']!;</code><br><br>More safety at the cost of more type narrowing checks.",
+                hasCode: true
+            },
+            {
+                q: "What is the difference between ES Module and CommonJS in TypeScript?",
+                code: null,
+                answer: "<strong>ES Modules (ESM):</strong><br>• <code>import/export</code> syntax<br>• Static analysis, tree-shakeable<br>• Top-level await supported<br>• module: 'ESNext' or 'ES2020'<br><br><strong>CommonJS (CJS):</strong><br>• <code>require/module.exports</code><br>• Dynamic, synchronous loading<br>• Node.js default historically<br>• module: 'CommonJS'<br><br><strong>Interop:</strong><br>• esModuleInterop enables easier mixing<br>• allowSyntheticDefaultImports for default imports<br><br>Modern projects should prefer ESM.",
+                hasCode: false
+            },
+            {
+                q: "What are ambient modules and how to declare them?",
+                code: `declare module '*.png' {
+    const content: string;
+    export default content;
+}`,
+                answer: "<strong>Ambient modules</strong> declare types for modules that don't have type definitions.<br><br><strong>Use cases:</strong><br>• Image imports (webpack, vite)<br>• CSS modules<br>• Non-typed npm packages<br>• Global augmentation<br><br><code>declare module 'untyped-lib' {<br>&nbsp;&nbsp;export function doSomething(): void;<br>}</code><br><br>Place in .d.ts files. These declarations don't emit code, just provide type information.",
+                hasCode: true
+            }
+        ];
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.onclick = () => card.classList.toggle('revealed');
+                
+                let codeHtml = '';
+                if (q.code) {
+                    codeHtml = `<div class="code-block">${q.code}</div>`;
+                }
+                
+                card.innerHTML = `
+                    <span class="question-number">${index + 1}</span>
+                    <div class="question-text">${q.q}</div>
+                    ${codeHtml}
+                    <div class="hint">👆 Tap to reveal answer</div>
+                    <div class="answer">
+                        <div class="answer-label">Answer</div>
+                        <div class="answer-text">${q.answer}</div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>
