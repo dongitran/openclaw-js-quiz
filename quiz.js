@@ -1406,8 +1406,49 @@ const quizData = [
 
 // Quiz State
 let currentQuestion = 0;
-let userAnswers = new Array(quizData.length).fill(null);
-let answerRevealed = new Array(quizData.length).fill(false);
+let userAnswers = [];
+let answerRevealed = [];
+let shuffledQuizData = [];
+
+// Fisher-Yates shuffle algorithm
+function fisherYatesShuffle(arr) {
+    const array = [...arr]; // Create a copy
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// Shuffle questions and options
+function shuffleQuiz() {
+    // Shuffle the order of questions
+    const shuffledQuestions = fisherYatesShuffle(quizData);
+    
+    // For each question, shuffle the options and update correct index
+    shuffledQuizData = shuffledQuestions.map(q => {
+        // Create array of [option, originalIndex] pairs
+        const optionsWithIndex = q.options.map((opt, idx) => ({
+            text: opt,
+            originalIndex: idx
+        }));
+        
+        // Shuffle the options
+        const shuffledOptions = fisherYatesShuffle(optionsWithIndex);
+        
+        // Find the new position of the correct answer
+        const newCorrectIndex = shuffledOptions.findIndex(
+            opt => opt.originalIndex === q.correct
+        );
+        
+        // Return shuffled question with updated correct index
+        return {
+            ...q,
+            options: shuffledOptions.map(opt => opt.text),
+            correct: newCorrectIndex
+        };
+    });
+}
 
 // DOM Elements
 const questionCounter = document.getElementById('questionCounter');
@@ -1426,6 +1467,14 @@ const explanation = document.getElementById('explanation');
 
 // Initialize
 function init() {
+    console.log('Quiz data loaded:', quizData.length, 'questions');
+    
+    shuffleQuiz();
+    console.log('Shuffled quiz:', shuffledQuizData.length, 'questions');
+    
+    userAnswers = new Array(shuffledQuizData.length).fill(null);
+    answerRevealed = new Array(shuffledQuizData.length).fill(false);
+    
     renderQuestion();
     updateNavigation();
 }
@@ -1438,11 +1487,23 @@ function updateBackgroundColor() {
 
 // Render current question
 function renderQuestion() {
-    const q = quizData[currentQuestion];
+    // Ensure data is loaded
+    if (!shuffledQuizData || shuffledQuizData.length === 0) {
+        console.error('Quiz data not loaded yet');
+        return;
+    }
+    
+    const q = shuffledQuizData[currentQuestion];
+    
+    if (!q) {
+        console.error('Question not found at index', currentQuestion);
+        return;
+    }
+    
     const labels = ['A', 'B', 'C', 'D'];
     
     // Update header
-    questionCounter.textContent = `${currentQuestion + 1}/${quizData.length}`;
+    questionCounter.textContent = `${currentQuestion + 1}/${shuffledQuizData.length}`;
     categoryBadge.textContent = q.category === 'JS' ? '⚡ JavaScript' : '🔷 TypeScript';
     categoryBadge.setAttribute('data-category', q.category);
     questionText.textContent = q.question;
@@ -1506,7 +1567,7 @@ function selectOption(index) {
 
 // Show/hide answer via modal
 function showAnswer() {
-    const q = quizData[currentQuestion];
+    const q = shuffledQuizData[currentQuestion];
     const labels = ['A', 'B', 'C', 'D'];
     
     if (answerRevealed[currentQuestion]) {
@@ -1546,7 +1607,7 @@ function prevQuestion() {
 }
 
 function nextQuestion() {
-    if (currentQuestion < quizData.length - 1) {
+    if (currentQuestion < shuffledQuizData.length - 1) {
         currentQuestion++;
         renderQuestion();
         updateNavigation();
@@ -1558,13 +1619,13 @@ function nextQuestion() {
 
 function updateNavigation() {
     prevBtn.disabled = currentQuestion === 0;
-    nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish →' : 'Next →';
+    nextBtn.textContent = currentQuestion === shuffledQuizData.length - 1 ? 'Finish →' : 'Next →';
 }
 
 // Calculate score and show completion
 function calculateScore() {
     let correct = 0;
-    quizData.forEach((q, index) => {
+    shuffledQuizData.forEach((q, index) => {
         if (userAnswers[index] === q.correct) {
             correct++;
         }
@@ -1574,7 +1635,7 @@ function calculateScore() {
 
 function showCompletion() {
     const correct = calculateScore();
-    const total = quizData.length;
+    const total = shuffledQuizData.length;
     const percentage = Math.round((correct / total) * 100);
     
     // Update stats
@@ -1598,10 +1659,12 @@ function showCompletion() {
 }
 
 function restartQuiz() {
+    shuffleQuiz();
     currentQuestion = 0;
-    userAnswers = new Array(quizData.length).fill(null);
-    answerRevealed = new Array(quizData.length).fill(false);
+    userAnswers = new Array(shuffledQuizData.length).fill(null);
+    answerRevealed = new Array(shuffledQuizData.length).fill(false);
     quizCard.style.display = 'flex';
+    quizCard.style.flexDirection = 'column';
     quizComplete.style.display = 'none';
     renderQuestion();
     updateNavigation();
@@ -1629,5 +1692,12 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Start
-init();
+// Start when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        init();
+    } catch (error) {
+        console.error('Failed to initialize quiz:', error);
+        questionText.textContent = 'Failed to load quiz. Please refresh the page.';
+    }
+});
