@@ -204,6 +204,7 @@ main {
     gap: 10px;
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     min-height: 200px;
     padding-right: 4px;
 }
@@ -255,7 +256,6 @@ main {
 .option.correct {
     border-color: var(--success);
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.5) 0%, rgba(52, 211, 153, 0.5) 100%);
-    animation: correctPulse 0.5s ease, glowSuccess 2s ease infinite;
 }
 
 .option.wrong {
