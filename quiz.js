@@ -1415,15 +1415,14 @@ const categoryBadge = document.getElementById('categoryBadge');
 const questionText = document.getElementById('questionText');
 const codeBlock = document.getElementById('codeBlock');
 const optionsContainer = document.getElementById('optionsContainer');
-const answerSection = document.getElementById('answerSection');
-const correctAnswer = document.getElementById('correctAnswer');
-const explanation = document.getElementById('explanation');
-const progressFill = document.getElementById('progressFill');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const showAnswerBtn = document.getElementById('showAnswerBtn');
 const quizComplete = document.getElementById('quizComplete');
 const quizCard = document.querySelector('.quiz-card');
+const answerModal = document.getElementById('answerModal');
+const correctAnswer = document.getElementById('correctAnswer');
+const explanation = document.getElementById('explanation');
 
 // Initialize
 function init() {
@@ -1431,19 +1430,25 @@ function init() {
     updateNavigation();
 }
 
+// Update background color based on question index
+function updateBackgroundColor() {
+    const hue = (currentQuestion * 3.6) % 360; // Gradually shift hue
+    document.body.style.background = `linear-gradient(135deg, hsl(${hue}, 55%, 88%) 0%, hsl(${(hue + 40) % 360}, 60%, 85%) 100%)`;
+}
+
 // Render current question
 function renderQuestion() {
     const q = quizData[currentQuestion];
+    const labels = ['A', 'B', 'C', 'D'];
     
     // Update header
-    questionCounter.textContent = `Question ${currentQuestion + 1}/${quizData.length}`;
-    categoryBadge.textContent = q.category === 'JS' ? 'JavaScript' : 'TypeScript';
-    categoryBadge.className = 'category-badge ' + q.category.toLowerCase();
+    questionCounter.textContent = `${currentQuestion + 1}/${quizData.length}`;
+    categoryBadge.textContent = q.category === 'JS' ? '⚡ JavaScript' : '🔷 TypeScript';
+    categoryBadge.setAttribute('data-category', q.category);
     questionText.textContent = q.question;
     
-    // Update progress
-    const progress = ((currentQuestion + 1) / quizData.length) * 100;
-    progressFill.style.width = `${progress}%`;
+    // Update background color
+    updateBackgroundColor();
     
     // Render code block if present
     if (q.code) {
@@ -1455,7 +1460,6 @@ function renderQuestion() {
     
     // Render options
     optionsContainer.innerHTML = '';
-    const labels = ['A', 'B', 'C', 'D'];
     
     q.options.forEach((option, index) => {
         const optionEl = document.createElement('div');
@@ -1483,16 +1487,8 @@ function renderQuestion() {
         optionsContainer.appendChild(optionEl);
     });
     
-    // Show/hide answer section
-    if (answerRevealed[currentQuestion]) {
-        answerSection.style.display = 'block';
-        correctAnswer.textContent = `Correct answer: ${labels[q.correct]}`;
-        explanation.innerHTML = q.explanation;
-        showAnswerBtn.textContent = 'Hide Answer';
-    } else {
-        answerSection.style.display = 'none';
-        showAnswerBtn.textContent = 'Show Answer';
-    }
+    // Update answer button state
+    showAnswerBtn.textContent = answerRevealed[currentQuestion] ? '💡 Hide Answer' : '💡 Show Answer';
 }
 
 // Escape HTML to prevent XSS
@@ -1508,14 +1504,36 @@ function selectOption(index) {
     renderQuestion();
 }
 
-// Show/hide answer
+// Show/hide answer via modal
 function showAnswer() {
+    const q = quizData[currentQuestion];
+    const labels = ['A', 'B', 'C', 'D'];
+    
     if (answerRevealed[currentQuestion]) {
+        // Hide modal if already showing
+        closeModal();
         answerRevealed[currentQuestion] = false;
+        renderQuestion();
     } else {
+        // Show modal with answer
         answerRevealed[currentQuestion] = true;
+        correctAnswer.textContent = `Correct answer: ${labels[q.correct]} - ${escapeHtml(q.options[q.correct])}`;
+        explanation.innerHTML = q.explanation;
+        openModal();
+        renderQuestion();
     }
-    renderQuestion();
+}
+
+// Modal functions
+function openModal() {
+    answerModal.classList.add('active');
+}
+
+function closeModal(event) {
+    if (event && event.target !== answerModal && event.target !== document.querySelector('.modal-close')) {
+        return;
+    }
+    answerModal.classList.remove('active');
 }
 
 // Navigation
@@ -1543,9 +1561,40 @@ function updateNavigation() {
     nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish →' : 'Next →';
 }
 
+// Calculate score and show completion
+function calculateScore() {
+    let correct = 0;
+    quizData.forEach((q, index) => {
+        if (userAnswers[index] === q.correct) {
+            correct++;
+        }
+    });
+    return correct;
+}
+
 function showCompletion() {
+    const correct = calculateScore();
+    const total = quizData.length;
+    const percentage = Math.round((correct / total) * 100);
+    
+    // Update stats
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('totalCount').textContent = total;
+    
+    // Update result message based on score
+    const resultMessage = document.getElementById('resultMessage');
+    if (percentage >= 90) {
+        resultMessage.textContent = '🏆 Excellent! You\'re a JS/TS master!';
+    } else if (percentage >= 70) {
+        resultMessage.textContent = '🎉 Great job! Solid understanding!';
+    } else if (percentage >= 50) {
+        resultMessage.textContent = '👍 Good effort! Keep practicing!';
+    } else {
+        resultMessage.textContent = '💪 Keep learning! You\'ll get there!';
+    }
+    
     quizCard.style.display = 'none';
-    quizComplete.style.display = 'block';
+    quizComplete.style.display = 'flex';
 }
 
 function restartQuiz() {
@@ -1560,7 +1609,13 @@ function restartQuiz() {
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
-    if (quizComplete.style.display === 'block') return;
+    // Handle Escape to close modal
+    if (e.key === 'Escape' && answerModal.classList.contains('active')) {
+        closeModal();
+        return;
+    }
+    
+    if (quizComplete.style.display === 'flex') return;
     
     if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
         prevQuestion();

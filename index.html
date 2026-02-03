@@ -3,64 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript & TypeScript Quiz - 100 Questions</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>JavaScript & TypeScript Quiz - 100 Questions 🧠</title>
+    <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🧠 JS & TS Quiz</h1>
-            <p class="subtitle">100 Questions (50 JS + 50 TS)</p>
+            <h1>🧠 JS & TS Mastery Quiz</h1>
         </header>
 
         <main>
             <div class="quiz-card">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                
                 <div class="question-header">
-                    <span class="question-counter" id="questionCounter">Question 1/100</span>
-                    <span class="category-badge js" id="categoryBadge">JavaScript</span>
+                    <span class="question-counter" id="questionCounter"></span>
+                    <span class="category-badge" id="categoryBadge">JavaScript</span>
                 </div>
 
                 <div class="question-content">
                     <h2 class="question-text" id="questionText">Loading question...</h2>
-                    
-                    <pre class="code-block" id="codeBlock" style="display: none;"></pre>
                     
                     <div class="options" id="optionsContainer">
                         <!-- Options will be inserted here -->
                     </div>
                 </div>
 
-                <div class="answer-section" id="answerSection" style="display: none;">
-                    <div class="answer-header">
-                        <span class="correct-answer" id="correctAnswer"></span>
-                    </div>
-                    <div class="explanation" id="explanation"></div>
-                </div>
-
                 <div class="actions">
                     <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">← Prev</button>
-                    <button class="btn btn-primary" id="showAnswerBtn" onclick="showAnswer()">Show Answer</button>
+                    <button class="btn btn-primary" id="showAnswerBtn" onclick="showAnswer()">💡 Show Answer</button>
                     <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()">Next →</button>
                 </div>
             </div>
 
             <div class="quiz-complete" id="quizComplete" style="display: none;">
                 <div class="complete-icon">🎉</div>
-                <h2>Quiz Complete!</h2>
-                <p>You've completed all 100 JavaScript & TypeScript questions</p>
-                <button class="btn btn-primary" onclick="restartQuiz()">Start Over</button>
+                <h2>Quiz Completed!</h2>
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="correctCount">0</span>
+                        <span class="stat-label">Correct</span>
+                    </div>
+                    <div class="stat-divider">/</div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCount">100</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+                <div class="result-message" id="resultMessage">Great job!</div>
+                <button class="btn btn-primary" onclick="restartQuiz()">🔄 Start Over</button>
             </div>
         </main>
-
-        <footer>
-            <p>Made with ❤️ for JS/TS learners</p>
-        </footer>
     </div>
 
-    <script src="quiz.js"></script>
+    <!-- Answer Modal -->
+    <div class="modal-overlay" id="answerModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">💡 Explanation</span>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="correct-answer" id="correctAnswer"></div>
+                <div class="explanation" id="explanation"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="quiz.js?v=5"></script>
 </body>
 </html>
