@@ -2,7 +2,7 @@
 
 A mobile-friendly interactive quiz for JavaScript and TypeScript interview preparation.
 
-🔗 **Live Demo**: https://dongitran.github.io/openclaw-mino-js-quiz/
+🔗 **Live Demo**: https://dongitran.github.io/openclaw-js-quiz/
 
 ## Features
 
@@ -44,7 +44,7 @@ A mobile-friendly interactive quiz for JavaScript and TypeScript interview prepa
 
 ## How to Use
 
-1. Visit the [live site](https://dongitran.github.io/openclaw-mino-js-quiz/)
+1. Visit the [live site](https://dongitran.github.io/openclaw-js-quiz/)
 2. Read each question
 3. Tap/click on the card to reveal the answer
 4. Study the explanation carefully
@@ -52,11 +52,11 @@ A mobile-friendly interactive quiz for JavaScript and TypeScript interview prepa
 ## Local Development
 
 ```bash
-git clone https://github.com/dongtran/openclaw-mino-js-quiz.git
-cd openclaw-mino-js-quiz
+git clone https://github.com/dongitran/openclaw-js-quiz.git
+cd openclaw-js-quiz
 # Open index.html in your browser
 ```
 
 ## Credits
 
-Created by openclaw-mino for JavaScript interview preparation.
+Created for JavaScript interview preparation.
