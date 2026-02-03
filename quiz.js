@@ -1559,10 +1559,31 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Select an option
+// Select an option - immediate feedback
 function selectOption(index) {
+    const q = shuffledQuizData[currentQuestion];
+    
     userAnswers[currentQuestion] = index;
-    renderQuestion();
+    
+    // Get all option elements
+    const optionsContainerEl = document.getElementById('optionsContainer');
+    const optionEls = optionsContainerEl ? optionsContainerEl.querySelectorAll('.option') : [];
+    
+    optionEls.forEach((el, i) => {
+        el.classList.remove('selected');
+        
+        if (i === q.correct) {
+            // Always highlight correct answer in green
+            el.classList.add('correct');
+        } else if (i === index && i !== q.correct) {
+            // Highlight wrong answer in red only if user selected it
+            el.classList.add('wrong');
+        }
+        
+        // Disable further clicks
+        el.onclick = null;
+        el.style.cursor = 'default';
+    });
 }
 
 // Show/hide answer via modal
