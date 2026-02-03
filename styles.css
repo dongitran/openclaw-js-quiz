@@ -243,7 +243,7 @@ main {
 .option:hover {
     border-color: rgba(255, 255, 255, 0.5);
     background: rgba(255, 255, 255, 0.2);
-    transform: translateX(8px);
+    transform: translateX(4px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
